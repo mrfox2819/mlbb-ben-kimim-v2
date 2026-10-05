@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05070d">
+
+<title>MLBB - Ben Kimim?</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+    background: #03050a;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.app {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(20, 65, 100, 0.35),
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(0, 120, 180, 0.16),
+            transparent 45%
+        ),
+        linear-gradient(
+            180deg,
+            #02040a 0%,
+            #07101d 55%,
+            #02050a 100%
+        );
+}
+
+.app::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    left: 50%;
+    top: 38%;
+    transform: translate(-50%, -50%);
+
+    background: radial-gradient(
+        circle,
+        rgba(0, 180, 255, 0.16),
+        transparent 65%
+    );
+
+    filter: blur(20px);
+    pointer-events: none;
+}
+
+.screen {
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 25px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ANA SAYFA */
+
+.game-title {
+    text-align: center;
+    margin-bottom: 15px;
+
+    font-size: clamp(30px, 9vw, 58px);
+    font-weight: 1000;
+    letter-spacing: 2px;
+
+    color: #f7d66a;
+
+    text-shadow:
+        0 2px 0 #ce6b0e,
+        0 0 12px rgba(255, 207, 71, .35),
+        0 0 30px rgba(255, 179, 0, .18);
+}
+
+.game-subtitle {
+    margin-bottom: 20px;
+
+    font-size: clamp(25px, 7vw, 45px);
+    font-weight: 1000;
+    letter-spacing: 3px;
+
+    color: white;
+
+    text-shadow:
+        0 3px 8px #000,
+        0 0 20px rgba(255,255,255,.15);
+}
+
+/* OYUNA BAŞLA */
+
+.start-button {
+    position: relative;
+
+    width: min(82vw, 360px);
+    min-height: 70px;
+
+    border: 2px solid #ffd95a;
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffe77b 0%,
+            #f5b92f 48%,
+            #c77c0d 100%
+        );
+
+    color: #15100a;
+
+    font-size: 22px;
+    font-weight: 1000;
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 0 #704609,
+        0 12px 30px rgba(0,0,0,.6),
+        0 0 30px rgba(255,190,30,.25);
+
+    transition: transform .12s ease;
+}
+
+.start-button:active {
+    transform: translateY(4px);
+
+    box-shadow:
+        0 2px 0 #704609,
+        0 7px 18px rgba(0,0,0,.6);
+}
+
+/* FOX İMZASI */
+
+.fox-credit {
+    position: fixed;
+
+    right: 14px;
+    bottom: 13px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    z-index: 50;
+
+    opacity: .92;
+
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+
+    padding: 5px;
+
+    color: white;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
+}
+
+.fox-credit:active {
+    transform: scale(.94);
+}
+
+.fox-credit:hover {
+    opacity: 1;
+}
+
+.fox-credit img {
+    width: 42px;
+    height: 42px;
+
+    object-fit: cover;
+    border-radius: 50%;
+
+    border: 2px solid #27d9ff;
+
+    box-shadow:
+        0 0 8px rgba(39,217,255,.8),
+        0 0 20px rgba(39,217,255,.25);
+}
+
+.fox-credit span {
+    font-size: 11px;
+    font-weight: 700;
+
+    color: white;
+
+    text-shadow:
+        0 2px 5px #000,
+        0 0 8px rgba(0,0,0,.8);
+}
+
+/* GERİ SAYIM */
+
+.countdown-number {
+    font-size: clamp(120px, 35vw, 210px);
+    font-weight: 1000;
+
+    color: #f5cd50;
+
+    text-shadow:
+        0 0 15px rgba(255,204,55,.7),
+        0 0 45px rgba(255,177,0,.35),
+        0 8px 20px #000;
+
+    animation: countdown .9s ease;
+}
+
+@keyframes countdown {
+    0% {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(.9);
+    }
+}
+
+/* KAHRAMAN EKRANI */
+
+.hero-screen {
+    text-align: center;
+}
+
+.question-text {
+    margin-bottom: 25px;
+
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 5px;
+
+    color: #8da5b9;
+}
+
+.hero-name {
+    width: 100%;
+
+    font-size: clamp(48px, 14vw, 105px);
+    line-height: 1.05;
+
+    font-weight: 1000;
+    text-transform: uppercase;
+
+    color: white;
+
+    text-shadow:
+        0 4px 12px #000,
+        0 0 25px rgba(255,255,255,.15);
+
+    word-break: break-word;
+
+    margin-bottom: 25px;
+}
+
+/* KAHRAMAN FOTOĞRAFI */
+
+.hero-image {
+    width: min(62vw, 280px);
+    height: min(42vh, 280px);
+
+    object-fit: contain;
+
+    margin-bottom: 45px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.65),
+        0 0 25px rgba(0,180,255,.18);
+}
+
+/* CEVAP BUTONLARI */
+
+.answer-buttons {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.answer-button {
+    width: min(43vw, 190px);
+    min-height: 60px;
+
+    border: none;
+    border-radius: 13px;
+
+    color: white;
+
+    font-size: 17px;
+    font-weight: 1000;
+
+    cursor: pointer;
+
+    transition: transform .12s ease;
+}
+
+.answer-button:active {
+    transform: scale(.93);
+}
+
+.correct {
+    background:
+        linear-gradient(
+            180deg,
+            #35db7d,
+            #159653
+        );
+
+    box-shadow:
+        0 5px 0 #086337,
+        0 10px 25px rgba(0,0,0,.5);
+}
+
+.wrong {
+    background:
+        linear-gradient(
+            180deg,
+            #f45a50,
+            #a92c28
+        );
+
+    box-shadow:
+        0 5px 0 #681b19,
+        0 10px 25px rgba(0,0,0,.5);
+}
+
+
+/* =====================================================
+   GELİŞTİRİCİLER SAYFASI
+===================================================== */
+
+.credits-screen {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.credits-title {
+    font-size: clamp(26px, 7vw, 40px);
+    font-weight: 1000;
+    letter-spacing: 2px;
+
+    color: #f7d66a;
+
+    margin-bottom: 35px;
+
+    text-shadow:
+        0 2px 0 #ce6b0e,
+        0 0 15px rgba(255,207,71,.35);
+}
+
+.developers {
+    width: 100%;
+    max-width: 650px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    gap: 25px;
+}
+
+.developer {
+    width: 45%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.developer-name {
+    width: 100%;
+
+    min-height: 45px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+
+    font-size: 17px;
+    font-weight: 900;
+
+    line-height: 1.2;
+
+    margin-bottom: 15px;
+
+    text-shadow:
+        0 2px 7px #000;
+}
+
+
+/* GELİŞTİRİCİ FOTOĞRAFLARI */
+
+.developer-photo {
+    width: 160px;
+    height: 190px;
+
+    object-fit: cover;
+
+    border-radius: 18px;
+
+    border: 2px solid #d4af37;
+
+    background: #111827;
+
+    display: block;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.5),
+        0 0 20px rgba(212,175,55,.15);
+}
+
+
+/* ANA SAYFA BUTONU */
+
+.home-button {
+    margin-top: 45px;
+
+    width: min(70vw, 260px);
+    min-height: 58px;
+
+    border: 2px solid #ffd95a;
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffe77b 0%,
+            #f5b92f 48%,
+            #c77c0d 100%
+        );
+
+    color: #15100a;
+
+    font-size: 18px;
+    font-weight: 1000;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 0 #704609,
+        0 10px 25px rgba(0,0,0,.5);
+}
+
+.home-button:active {
+    transform: translateY(3px);
+
+    box-shadow:
+        0 2px 0 #704609,
+        0 6px 15px rgba(0,0,0,.5);
+}
+
+
+/* TELEFON */
+
+@media (max-width: 480px) {
+
+    .screen {
+        padding: 20px;
+    }
+
+    .game-title {
+        font-size: 34px;
+    }
+
+    .game-subtitle {
+        font-size: 29px;
+        margin-bottom: 20px;
+    }
+
+    .start-button {
+        min-height: 65px;
+        font-size: 20px;
+    }
+
+    .hero-name {
+        margin-bottom: 20px;
+    }
+
+    .hero-image {
+        width: min(60vw, 230px);
+        height: min(38vh, 230px);
+        margin-bottom: 35px;
+    }
+
+    .answer-button {
+        font-size: 15px;
+    }
+
+    /* GELİŞTİRİCİLER */
+
+    .credits-title {
+        font-size: 25px;
+        margin-bottom: 25px;
+    }
+
+    .developers {
+        gap: 10px;
+    }
+
+    .developer {
+        width: 48%;
+    }
+
+    .developer-name {
+        font-size: 13px;
+        min-height: 45px;
+    }
+
+    .developer-photo {
+        width: 125px;
+        height: 155px;
+        border-radius: 15px;
+    }
+
+    .home-button {
+        margin-top: 35px;
+        min-height: 55px;
+        font-size: 16px;
+    }
+}
+
+
+/* YATAY EKRAN */
+
+@media (orientation: landscape) and (max-height: 500px) {
+
+    .game-title {
+        font-size: 30px;
+    }
+
+    .game-subtitle {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .start-button {
+        min-height: 50px;
+    }
+
+    .hero-name {
+        margin-bottom: 15px;
+        font-size: 55px;
+    }
+
+    .hero-image {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 20px;
+    }
+
+    .credits-title {
+        font-size: 25px;
+        margin-bottom: 15px;
+    }
+
+    .developer-name {
+        font-size: 13px;
+    }
+
+    .developer-photo {
+        width: 100px;
+        height: 115px;
+    }
+
+    .home-button {
+        margin-top: 15px;
+        min-height: 45px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ANA SAYFA -->
+
+    <section
+        id="homeScreen"
+        class="screen"
+    >
+
+        <div class="game-title">
+            MOBILE LEGENDS
+        </div>
+
+        <div class="game-subtitle">
+            BEN KİMİM?
+        </div>
+
+        <div>
+            10 soruda heroyu bilmeye çalış!
+        </div>
+
+        <br><br>
+
+        <button
+            class="start-button"
+            onclick="startGame()"
+        >
+            OYUNA BAŞLA
+        </button>
+
+    </section>
+
+
+    <!-- GERİ SAYIM -->
+
+    <section
+        id="countdownScreen"
+        class="screen hidden"
+    >
+
+        <div
+            id="countdownNumber"
+            class="countdown-number"
+        >
+            5
+        </div>
+
+    </section>
+
+
+    <!-- KAHRAMAN -->
+
+    <section
+        id="heroScreen"
+        class="screen hero-screen hidden"
+    >
+
+        <div class="question-text">
+            BEN KİMİM?
+        </div>
+
+        <div
+            id="heroName"
+            class="hero-name"
+        >
+        </div>
+
+        <img
+            id="heroImage"
+            class="hero-image"
+            alt="Kahraman"
+        >
+
+        <div class="answer-buttons">
+
+            <button
+                class="answer-button correct"
+                onclick="finishRound()"
+            >
+                ✓ BİLDİM
+            </button>
+
+            <button
+                class="answer-button wrong"
+                onclick="finishRound()"
+            >
+                ✕ BİLEMEDİM
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         GELİŞTİRİCİLER SAYFASI
+    ================================================== -->
+
+    <section
+        id="creditsScreen"
+        class="screen credits-screen hidden"
+    >
+
+        <div class="credits-title">
+            GELİŞTİRİCİLER
+        </div>
+
+        <div class="developers">
+
+            <!-- ALİ BARAN -->
+
+            <div class="developer">
+
+                <div class="developer-name">
+                    Ali Baran Boztaş / Fox: Kod
+                </div>
+
+                <img
+                    class="developer-photo"
+                    src="Ali.jpg"
+                    alt="Ali Baran Boztaş"
+                >
+
+            </div>
+
+
+            <!-- KEREM -->
+
+            <div class="developer">
+
+                <div class="developer-name">
+                    Kerem Taşdemir : FOTOĞRAFLARI
+                </div>
+
+                <img
+                    class="developer-photo"
+                    src="kerem.jpg"
+                    alt="Kerem Taşdemir"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- ANA SAYFA -->
+
+        <button
+            class="home-button"
+            onclick="goHome()"
+        >
+            ANA SAYFA
+        </button>
+
+    </section>
+
+
+    <!-- FOX İMZASI -->
+
+    <button
+        class="fox-credit"
+        onclick="showCredits()"
+        aria-label="Geliştiriciler sayfasını aç"
+    >
+
+        <img
+            alt="Fox"
+            src="fox-logo.png"
+        >
+
+        <span>
+            Ali Baran Boztaş/Fox ve Kerem Taşdemir tarafından yapıldı
+        </span>
+
+    </button>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   MOBILE LEGENDS KAHRAMANLARI + FOTOĞRAFLARI
+===================================================== */
+
+const heroes = [
+
+    { name: "Aamon", image: "aamon.jpg" },
+    { name: "Akai", image: "akai.jpg" },
+    { name: "Aldous", image: "aldous.jpg" },
+    { name: "Alice", image: "alice.jpg" },
+    { name: "Alpha", image: "alpha.jpg" },
+    { name: "Alucard", image: "alucard.jpg" },
+    { name: "Angela", image: "angela.jpg" },
+    { name: "Argus", image: "argus.jpg" },
+    { name: "Arlott", image: "arlott.jpg" },
+    { name: "Atlas", image: "atlas.jpg" },
+    { name: "Aulus", image: "aulus.jpg" },
+    { name: "Aurora", image: "aurora.jpg" },
+    { name: "Badang", image: "badang.jpg" },
+    { name: "Balmond", image: "balmond.jpg" },
+    { name: "Bane", image: "bane.jpg" },
+    { name: "Barats", image: "barats.jpg" },
+    { name: "Baxia", image: "baxia.jpg" },
+    { name: "Beatrix", image: "beatrix.jpg" },
+    { name: "Belerick", image: "belerick.jpg" },
+    { name: "Benedetta", image: "benedetta.jpg" },
+    { name: "Brody", image: "brody.jpg" },
+    { name: "Bruno", image: "bruno.jpg" },
+    { name: "Carmilla", image: "carmilla.jpg" },
+    { name: "Cecilion", image: "cecilion.jpg" },
+    { name: "Chang'e", image: "change.jpg" },
+    { name: "Chip", image: "chip.jpg" },
+    { name: "Chou", image: "chou.jpg" },
+    { name: "Cici", image: "cici.jpg" },
+    { name: "Claude", image: "claude.jpg" },
+    { name: "Clint", image: "clint.jpg" },
+    { name: "Cyclops", image: "cyclops.jpg" },
+    { name: "Diggie", image: "diggie.jpg" },
+    { name: "Dyrroth", image: "dyrroth.jpg" },
+    { name: "Edith", image: "edith.jpg" },
+    { name: "Esmeralda", image: "esmeralda.jpg" },
+    { name: "Estes", image: "estes.jpg" },
+    { name: "ÇALIdora", image: "eudora.jpg" },
+    { name: "Fanny", image: "fanny.jpg" },
+    { name: "Faramis", image: "faramis.jpg" },
+    { name: "Floryn", image: "floryn.jpg" },
+    { name: "Franco", image: "franco.jpg" },
+    { name: "Fredrinn", image: "fredrinn.jpg" },
+    { name: "Freya", image: "freya.jpg" },
+    { name: "Gatotkaca", image: "gatotkaca.jpg" },
+    { name: "Gloo", image: "gloo.jpg" },
+    { name: "Gord", image: "gord.jpg" },
+    { name: "Granger", image: "granger.jpg" },
+    { name: "Grock", image: "grock.jpg" },
+    { name: "Guinevere", image: "guinevere.jpg" },
+    { name: "Gusion", image: "gusion.jpg" },
+    { name: "Hanabi", image: "hanabi.jpg" },
+    { name: "Hanzo", image: "hanzo.jpg" },
+    { name: "Harith", image: "harith.jpg" },
+    { name: "Harley", image: "harley.jpg" },
+    { name: "Hayabusa", image: "hayabusa.jpg" },
+    { name: "Helcurt", image: "helcurt.jpg" },
+    { name: "Hilda", image: "hilda.jpg" },
+    { name: "Hirara", image: "hirara.jpg" },
+    { name: "Hylos", image: "hylos.jpg" },
+    { name: "Irithel", image: "irithel.jpg" },
+    { name: "Ixia", image: "ixia.jpg" },
+    { name: "Jawhead", image: "jawhead.jpg" },
+    { name: "Johnson", image: "johnson.jpg" },
+    { name: "Joy", image: "joy.jpg" },
+    { name: "Julian", image: "julian.jpg" },
+    { name: "Kadita", image: "kadita.jpg" },
+    { name: "Kagura", image: "kagura.jpg" },
+    { name: "Kaja", image: "kaja.jpg" },
+    { name: "Kalea", image: "kalea.jpg" },
+    { name: "Karina", image: "karina.jpg" },
+    { name: "Karrie", image: "karrie.jpg" },
+    { name: "Khaleed", image: "khaleed.jpg" },
+    { name: "Khufra", image: "khufra.jpg" },
+    { name: "Kimmy", image: "kimmy.jpg" },
+    { name: "Lancelot", image: "lancelot.jpg" },
+    { name: "Lapu-Lapu", image: "lapu-lapu.jpg" },
+    { name: "Layla", image: "layla.jpg" },
+    { name: "Leomord", image: "leomord.jpg" },
+    { name: "Lesley", image: "lesley.jpg" },
+    { name: "Ling", image: "ling.jpg" },
+    { name: "Lolita", image: "lolita.jpg" },
+    { name: "Lukas", image: "lukas.jpg" },
+    { name: "Lunox", image: "lunox.jpg" },
+    { name: "Luo Yi", image: "luo-yi.jpg" },
+    { name: "Lylia", image: "lylia.jpg" },
+    { name: "Marcel", image: "marcel.jpg" },
+    { name: "Martis", image: "martis.jpg" },
+    { name: "Masha", image: "masha.jpg" },
+    { name: "Mathilda", image: "mathilda.jpg" },
+    { name: "Melissa", image: "melissa.jpg" },
+    { name: "Minotaur", image: "minotaur.jpg" },
+    { name: "Minsitthar", image: "minsitthar.jpg" },
+    { name: "Miya", image: "miya.jpg" },
+    { name: "Moskov", image: "moskov.jpg" },
+    { name: "Nana", image: "nana.jpg" },
+    { name: "Natalia", image: "natalia.jpg" },
+    { name: "Natan", image: "natan.jpg" },
+    { name: "Nolan", image: "nolan.jpg" },
+    { name: "Novaria", image: "novaria.jpg" },
+    { name: "Obsidia", image: "obsidia.jpg" },
+    { name: "Odette", image: "odette.jpg" },
+    { name: "Paquito", image: "paquito.jpg" },
+    { name: "Pharsa", image: "pharsa.jpg" },
+    { name: "Phoveus", image: "phoveus.jpg" },
+    { name: "Popol and Kupa", image: "popol-and-kupa.jpg" },
+    { name: "Rafaela", image: "rafaela.jpg" },
+    { name: "Roger", image: "roger.jpg" },
+    { name: "Ruby", image: "ruby.jpg" },
+    { name: "Saber", image: "saber.jpg" },
+    { name: "Selena", image: "selena.jpg" },
+    { name: "Silvanna", image: "silvanna.jpg" },
+    { name: "Sora", image: "sora.jpg" },
+    { name: "Sun", image: "sun.jpg" },
+    { name: "Suyou", image: "suyou.jpg" },
+    { name: "Terizla", image: "terizla.jpg" },
+    { name: "Thamuz", image: "thamuz.jpg" },
+    { name: "Tigreal", image: "tigreal.jpg" },
+    { name: "Uranus", image: "uranus.jpg" },
+    { name: "Vale", image: "vale.jpg" },
+    { name: "Valentina", image: "valentina.jpg" },
+    { name: "Valir", image: "valir.jpg" },
+    { name: "Vexana", image: "vexana.jpg" },
+    { name: "Wanwan", image: "wanwan.jpg" },
+    { name: "X.Borg", image: "x-borg.jpg" },
+    { name: "Xavier", image: "xavier.jpg" },
+    { name: "Yi Sun-Shin", image: "yi-sun-shin.jpg" },
+    { name: "Yin", image: "yin.jpg" },
+    { name: "Yu Zhong", image: "yu-zhong.jpg" },
+    { name: "Yve", image: "yve.jpg" },
+    { name: "Zetian", image: "zetian.jpg" },
+    { name: "Zhask", image: "zhask.jpg" },
+    { name: "Zhuxin", image: "zhuxin.jpg" },
+    { name: "Zilong", image: "zilong.jpg" }
+
+];
+
+
+/* SON ÇIKAN KAHRAMAN */
+
+let lastHero = null;
+
+
+/* OYUNU BAŞLAT */
+
+function startGame() {
+
+    document
+        .getElementById("homeScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("creditsScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("heroScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("countdownScreen")
+        .classList.remove("hidden");
+
+
+    let number = 5;
+
+    const countdown =
+        document.getElementById("countdownNumber");
+
+    countdown.textContent = number;
+
+    restartCountdownAnimation();
+
+
+    const timer = setInterval(() => {
+
+        number--;
+
+        if (number > 0) {
+
+            countdown.textContent = number;
+
+            restartCountdownAnimation();
+
+        } else {
+
+            clearInterval(timer);
+
+            showRandomHero();
+
+        }
+
+    }, 1000);
+}
+
+
+/* GERİ SAYIM ANİMASYONU */
+
+function restartCountdownAnimation() {
+
+    const countdown =
+        document.getElementById("countdownNumber");
+
+    countdown.style.animation = "none";
+
+    void countdown.offsetWidth;
+
+    countdown.style.animation =
+        "countdown .9s ease";
+}
+
+
+/* RASTGELE KAHRAMAN */
+
+function showRandomHero() {
+
+    let randomHero;
+
+    do {
+
+        const randomIndex =
+            Math.floor(
+                Math.random() * heroes.length
+            );
+
+        randomHero =
+            heroes[randomIndex];
+
+    } while (
+        heroes.length > 1 &&
+        randomHero.name === lastHero
+    );
+
+
+    lastHero = randomHero.name;
+
+
+    document
+        .getElementById("countdownScreen")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("heroScreen")
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById("heroName")
+        .textContent = randomHero.name;
+
+
+    document
+        .getElementById("heroImage")
+        .src = randomHero.image;
+}
+
+
+/* BİLDİM / BİLEMEDİM */
+
+function finishRound() {
+
+    document
+        .getElementById("heroScreen")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("homeScreen")
+        .classList.remove("hidden");
+}
+
+
+/* GELİŞTİRİCİLER SAYFASINI AÇ */
+
+function showCredits() {
+
+    document
+        .getElementById("homeScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("countdownScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("heroScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("creditsScreen")
+        .classList.remove("hidden");
+}
+
+
+/* ANA SAYFAYA DÖN */
+
+function goHome() {
+
+    document
+        .getElementById("creditsScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("countdownScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("heroScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("homeScreen")
+        .classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
